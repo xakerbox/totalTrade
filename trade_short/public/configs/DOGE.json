@@ -1,0 +1,8 @@
+{
+    "stackValue": 130,
+    "shoulder": 1,
+    "workingPercent": 30,
+    "middleSplitter": [0.7, 1.5, 4, 8, 13],
+    "middleBuyIncreaser": [1, 1.5, 2.25, 3.375, 5.0625, 7.59375],
+    "profitPercent": [1.038, 1.038, 1.038, 1.038, 1.038, 1.038]
+}

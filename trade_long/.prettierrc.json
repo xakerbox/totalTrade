@@ -1,0 +1,19 @@
+{
+  "extends": ["prettier"],
+  "overrides": [
+    {
+      "files": ["*.{ts,tsx}"],
+      "plugins": ["@typescript-eslint"],
+      "parserOptions": {
+        "project": "./tsconfig.json"
+      },
+      "parser": "@typescript-eslint/parser",
+      "rules": {
+        "@typescript-eslint/no-use-before-define": [
+          "error",
+          { "variables": false }
+        ]
+      }
+    }
+  ]
+}

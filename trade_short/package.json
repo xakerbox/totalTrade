@@ -1,0 +1,36 @@
+{
+  "name": "cryptobot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./public/index",
+    "calc": "node ./public/utils/calculator",
+    "profit": "node ./public/binance/test",
+    "telega": "node ./public/telegram/telegram",
+    "SUSHI_short": "node ./public/SUSHI_short",
+    "WAVES_short": "node ./public/WAVES_short",
+    "1INCH_short": "node ./public/1INCH_short",
+    "DYDX_short": "node ./public/DYDX_short",
+    "XRP_short": "node ./public/XRP_short",
+    "ADA_short": "node ./public/ADA_short",
+    "UNFI_short": "node ./public/UNFI_short",
+    "COTI_short": "node ./public/COTI_short",
+    "STORJ_short": "node ./public/STORJ_short",
+    "KAVA_short": "tsc && node ./public/KAVA_short"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^18.8.5",
+    "dotenv": "^16.0.3",
+    "node-binance-api": "^0.13.1",
+    "node-telegram-bot-api": "^0.59.0"
+  },
+  "devDependencies": {
+    "@types/node-telegram-bot-api": "^0.57.5",
+    "prettier": "2.7.1"
+  }
+}

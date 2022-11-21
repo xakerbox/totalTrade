@@ -1,0 +1,10 @@
+{
+  "coin": "UNFIUSDT",
+  "stackValue": 125,
+  "shoulder": 10,
+  "workingPercent": 30,
+  "middleSplitter": [-0.5, -1.1, -2.3, -5, -8],
+  "middleBuyIncreaser": [1, 1.5, 2.25, 3.375, 5.0625, 7.59375],
+  "profitPercent": [1.0038, 1.0038, 1.0038, 1.0038, 1.0038, 1.0038],
+  "tickerSize": 3
+}
