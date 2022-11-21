@@ -19,12 +19,13 @@ const telegram = new TelegaBot();
 let recountedMiddlePrices: number[];
 let recountedQty: number[];
 let tierArray = [1, 0, 0, 0, 0, 0];
+let invovledProfit = 0;
 
 const zeroBuy = async () => {
   try {
     const { markPrice } = await binance.getMarketPrice(coin);
     const middlePrices = await calc.getAllMiddlePrices(markPrice);
-    const qty = await calc.buyQtyCoins(middlePrices);
+    const qty = await calc.buyQtyCoins(middlePrices, invovledProfit);
 
     await binance.marketBuy(coin, qty[0]);
     const getPositionInfo = await binance.getCoinInPositionLong(coin);
@@ -56,7 +57,7 @@ const zeroBuy = async () => {
     recountedMiddlePrices = await calc.getAllMiddlePrices(
       +getPositionInfo[0].entryPrice
     );
-    recountedQty = await calc.buyQtyCoins(recountedMiddlePrices);
+    recountedQty = await calc.buyQtyCoins(recountedMiddlePrices, invovledProfit);
 
     const allMiddleOrders = generateMiddleOrders(
       recountedMiddlePrices,
@@ -85,6 +86,7 @@ const run = async () => {
       await binance.cancelAllLimitsByCoin(coin);
       if (profit) {
         await telegram.sendSellOrderFinished(coin, profit);
+        invovledProfit = invovledProfit + profit;
       }
       tierArray = [1, 0, 0, 0, 0, 0];
       await zeroBuy();
@@ -265,41 +267,6 @@ const run = async () => {
   } catch (e) {
     console.log("Error inside catch blocks or on getting openned orders:", e);
   }
-
-  //
-  // const getPositionInfo = await binance.getCoinInPosition(`${calc.coin}USDT`);
-
-  // const result = await <Promise<BinanceBalance>>binance.getUSDTBalance();
-  // console.log(result);
-
-  // console.log('Counts for DOGEUSDT:\n');
-  // const { markPrice } = await binance.getMarketPrice(order.coin);
-  // console.log(markPrice);
-  // const prices = await calc.getAllMiddlePrices(markPrice);
-  // console.log(prices);
-  // const qty = await calc.buyQtyCoins(prices);
-  // console.log(qty);
-
-  // const responseOnPutOrder = await binance.putLimitOrder(order)
-  // console.log('Response after placing order', responseOnPutOrder);
-
-  // const resultOnCloseOrder = await binance.cancelLimitOrderById(order.coin, 19482102343);
-  // console.log('Result on closing order', resultOnCloseOrder);
-
-  // const resultOnCancelOrder = await binance.cancelAllLimitsByCoin('TRXUSDT');
-  // console.log(resultOnCancelOrder);
-
-  // const allExistingOrders = await binance.getOpenedOrders();
-  // console.log("Get all orders:", allExistingOrders);
-
-  // const limitOnSell = await binance.getSellOrder(order.coin);
-  // console.log(limitOnSell);
-
-  // const ResultOnOpenedPositions = await binance.getAllOpenedPositions();
-  // console.log(ResultOnOpenedPositions);
-
-  // const ExisstPositionOrNot = await binance.getCoinInPosition('KAVAUSDT');
-  // console.log(ExisstPositionOrNot);
 };
 
 const timer = async () => {
