@@ -20,9 +20,9 @@ class Calculator {
         const coinConfig = (0, configReader_1.getConfig)(this.coin);
         return coinConfig;
     }
-    countWorkingStack() {
+    countWorkingStack(invovledProfit) {
         const { stackValue, workingPercent, shoulder } = this.readConfig();
-        return stackValue * shoulder * (workingPercent / 100);
+        return (stackValue + invovledProfit) * shoulder * (workingPercent / 100);
     }
     ;
     getAllMiddlePrices(startBuyPrice) {
@@ -44,10 +44,10 @@ class Calculator {
      * @param pricesToBuy - precounted priced on buy coins;
      * @returns - array with qnty of coins to buy on zero buy and 5 middlers.
      */
-    buyQtyCoins(pricesToBuy) {
+    buyQtyCoins(pricesToBuy, invovledProfit) {
         return __awaiter(this, void 0, void 0, function* () {
             const { middleBuyIncreaser } = this.readConfig();
-            const workingMoney = this.countWorkingStack();
+            const workingMoney = this.countWorkingStack(invovledProfit);
             const coins = workingMoney /
                 pricesToBuy.reduce((pre, cur, index) => {
                     return pre + cur * middleBuyIncreaser[index];
@@ -65,6 +65,3 @@ class Calculator {
     ;
 }
 exports.Calculator = Calculator;
-const calc = new Calculator('SUSHI');
-console.log(calc.countWorkingStack());
-console.log(calc.getAllMiddlePrices(1.488));
