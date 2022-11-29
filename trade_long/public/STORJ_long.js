@@ -24,11 +24,12 @@ const telegram = new telegram_1.TelegaBot();
 let recountedMiddlePrices;
 let recountedQty;
 let tierArray = [1, 0, 0, 0, 0, 0];
+let invovledProfit = 0;
 const zeroBuy = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { markPrice } = yield binance.getMarketPrice(coin);
         const middlePrices = yield calc.getAllMiddlePrices(markPrice);
-        const qty = yield calc.buyQtyCoins(middlePrices);
+        const qty = yield calc.buyQtyCoins(middlePrices, invovledProfit);
         yield binance.marketBuy(coin, qty[0]);
         const getPositionInfo = yield binance.getCoinInPositionLong(coin);
         console.log("Zero buy:", getPositionInfo[0].positionAmt, getPositionInfo[0].symbol);
@@ -46,7 +47,7 @@ const zeroBuy = () => __awaiter(void 0, void 0, void 0, function* () {
             yield telegram.sendPutSellOrder(coin, qty, limitPrice);
         }
         recountedMiddlePrices = yield calc.getAllMiddlePrices(+getPositionInfo[0].entryPrice);
-        recountedQty = yield calc.buyQtyCoins(recountedMiddlePrices);
+        recountedQty = yield calc.buyQtyCoins(recountedMiddlePrices, invovledProfit);
         const allMiddleOrders = (0, countOrders_1.generateMiddleOrders)(recountedMiddlePrices, recountedQty, calc.coin, tickerSize, balance_1.OrderType.BUY);
         for (let middleOrder of allMiddleOrders) {
             yield binance.putLimitOrder(middleOrder);
@@ -66,6 +67,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             yield binance.cancelAllLimitsByCoin(coin);
             if (profit) {
                 yield telegram.sendSellOrderFinished(coin, profit);
+                invovledProfit = invovledProfit + profit;
             }
             tierArray = [1, 0, 0, 0, 0, 0];
             yield zeroBuy();
@@ -222,31 +224,6 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
     catch (e) {
         console.log("Error inside catch blocks or on getting openned orders:", e);
     }
-    //
-    // const getPositionInfo = await binance.getCoinInPosition(`${calc.coin}USDT`);
-    // const result = await <Promise<BinanceBalance>>binance.getUSDTBalance();
-    // console.log(result);
-    // console.log('Counts for DOGEUSDT:\n');
-    // const { markPrice } = await binance.getMarketPrice(order.coin);
-    // console.log(markPrice);
-    // const prices = await calc.getAllMiddlePrices(markPrice);
-    // console.log(prices);
-    // const qty = await calc.buyQtyCoins(prices);
-    // console.log(qty);
-    // const responseOnPutOrder = await binance.putLimitOrder(order)
-    // console.log('Response after placing order', responseOnPutOrder);
-    // const resultOnCloseOrder = await binance.cancelLimitOrderById(order.coin, 19482102343);
-    // console.log('Result on closing order', resultOnCloseOrder);
-    // const resultOnCancelOrder = await binance.cancelAllLimitsByCoin('TRXUSDT');
-    // console.log(resultOnCancelOrder);
-    // const allExistingOrders = await binance.getOpenedOrders();
-    // console.log("Get all orders:", allExistingOrders);
-    // const limitOnSell = await binance.getSellOrder(order.coin);
-    // console.log(limitOnSell);
-    // const ResultOnOpenedPositions = await binance.getAllOpenedPositions();
-    // console.log(ResultOnOpenedPositions);
-    // const ExisstPositionOrNot = await binance.getCoinInPosition('KAVAUSDT');
-    // console.log(ExisstPositionOrNot);
 });
 const timer = () => __awaiter(void 0, void 0, void 0, function* () {
     return new Promise((resolve) => {
